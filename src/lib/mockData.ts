@@ -1,4 +1,12 @@
 // Mock data for development and testing
+import headphonesImg from '@/assets/headphones.jpg';
+import smartwatchImg from '@/assets/smartwatch.jpg';
+import leatherBagImg from '@/assets/leather-bag.jpg';
+import deskLampImg from '@/assets/desk-lamp.jpg';
+import gatsbyBookImg from '@/assets/gatsby-book.jpg';
+import pythonBookImg from '@/assets/python-book.jpg';
+import runningShoesImg from '@/assets/running-shoes.jpg';
+import casualShoesImg from '@/assets/casual-shoes.jpg';
 
 export interface Product {
   id: string;
@@ -10,6 +18,9 @@ export interface Product {
   inStock: boolean;
   rating: number;
   reviews: number;
+  sku?: string;
+  manufacturer?: string;
+  supplier?: string;
 }
 
 export interface User {
@@ -44,88 +55,112 @@ export const mockProducts: Product[] = [
     name: 'Premium Wireless Headphones',
     description: 'High-quality wireless headphones with active noise cancellation',
     price: 299.99,
-    image: '/placeholder.svg',
+    image: headphonesImg,
     category: 'Electronics',
     inStock: true,
     rating: 4.8,
     reviews: 342,
+    sku: 'WH-1000XM5',
+    manufacturer: 'AudioTech',
+    supplier: 'TechSupply Co',
   },
   {
     id: '2',
     name: 'Smart Watch Pro',
     description: 'Advanced fitness tracking with heart rate monitor and GPS',
     price: 399.99,
-    image: '/placeholder.svg',
+    image: smartwatchImg,
     category: 'Electronics',
     inStock: true,
     rating: 4.6,
     reviews: 289,
+    sku: 'SW-PRO-2024',
+    manufacturer: 'FitTrack',
+    supplier: 'TechSupply Co',
   },
   {
     id: '3',
     name: 'Leather Messenger Bag',
     description: 'Handcrafted genuine leather bag with laptop compartment',
     price: 189.99,
-    image: '/placeholder.svg',
+    image: leatherBagImg,
     category: 'Accessories',
     inStock: true,
     rating: 4.9,
     reviews: 156,
+    sku: 'LMB-BR-001',
+    manufacturer: 'LeatherCraft',
+    supplier: 'Fashion Goods Ltd',
   },
   {
     id: '4',
     name: 'Minimalist Desk Lamp',
     description: 'Modern LED desk lamp with adjustable brightness',
     price: 79.99,
-    image: '/placeholder.svg',
+    image: deskLampImg,
     category: 'Home',
     inStock: false,
     rating: 4.5,
     reviews: 98,
+    sku: 'DL-MIN-LED',
+    manufacturer: 'LightWorks',
+    supplier: 'Home Essentials',
   },
   {
     id: '5',
     name: 'The Great Gatsby Book',
     description: 'Classic American novel by F. Scott Fitzgerald',
     price: 14.99,
-    image: '/placeholder.svg',
+    image: gatsbyBookImg,
     category: 'Books',
     inStock: true,
     rating: 4.7,
     reviews: 523,
+    sku: 'ISBN-978-0743273565',
+    manufacturer: 'Scribner Publishing',
+    supplier: 'BookWorld Distributors',
   },
   {
     id: '6',
     name: 'Python Programming Book',
     description: 'Complete guide to Python programming for beginners',
     price: 39.99,
-    image: '/placeholder.svg',
+    image: pythonBookImg,
     category: 'Books',
     inStock: true,
     rating: 4.8,
     reviews: 234,
+    sku: 'ISBN-978-1593279288',
+    manufacturer: 'Tech Press',
+    supplier: 'BookWorld Distributors',
   },
   {
     id: '7',
     name: 'Running Shoes Pro',
     description: 'Lightweight running shoes with cushioned sole',
     price: 129.99,
-    image: '/placeholder.svg',
+    image: runningShoesImg,
     category: 'Footwear',
     inStock: true,
     rating: 4.6,
     reviews: 412,
+    sku: 'RS-PRO-BLK-42',
+    manufacturer: 'SportFit',
+    supplier: 'Athletic Gear Co',
   },
   {
     id: '8',
     name: 'Casual Leather Shoes',
     description: 'Comfortable leather shoes for everyday wear',
     price: 89.99,
-    image: '/placeholder.svg',
+    image: casualShoesImg,
     category: 'Footwear',
     inStock: true,
     rating: 4.4,
     reviews: 187,
+    sku: 'CLS-LTH-BRN-41',
+    manufacturer: 'ClassicWear',
+    supplier: 'Athletic Gear Co',
   },
 ];
 

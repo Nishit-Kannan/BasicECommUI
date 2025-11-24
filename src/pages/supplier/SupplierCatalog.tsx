@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+
+const CATEGORIES = ['Electronics', 'Books', 'Footwear', 'Accessories', 'Home'];
 
 const SupplierCatalog = () => {
   const navigate = useNavigate();
@@ -46,6 +49,14 @@ const SupplierCatalog = () => {
                   <Input id="productName" required />
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="sku">SKU</Label>
+                  <Input id="sku" placeholder="e.g., WH-1000XM5" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="manufacturer">Manufacturer</Label>
+                  <Input id="manufacturer" placeholder="e.g., AudioTech" required />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <Input id="description" required />
                 </div>
@@ -56,7 +67,18 @@ const SupplierCatalog = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
-                    <Input id="category" required />
+                    <Select required>
+                      <SelectTrigger id="category">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CATEGORIES.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <div className="space-y-2">
