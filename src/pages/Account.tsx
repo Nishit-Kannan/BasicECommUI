@@ -20,7 +20,7 @@ const Account = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={0} showSearch />
       
       <main className="container py-8">
         <h1 className="mb-8 text-3xl font-bold">Account Settings</h1>

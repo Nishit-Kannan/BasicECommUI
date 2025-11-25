@@ -14,6 +14,9 @@ import Account from "./pages/Account";
 import SupplierDashboard from "./pages/supplier/SupplierDashboard";
 import SupplierCatalog from "./pages/supplier/SupplierCatalog";
 import SupplierInventory from "./pages/supplier/SupplierInventory";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import SupplierManagement from "./pages/admin/SupplierManagement";
+import CategoryManagement from "./pages/admin/CategoryManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +40,9 @@ const App = () => (
           <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
           <Route path="/supplier/catalog" element={<SupplierCatalog />} />
           <Route path="/supplier/inventory" element={<SupplierInventory />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/suppliers" element={<SupplierManagement />} />
+          <Route path="/admin/categories" element={<CategoryManagement />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

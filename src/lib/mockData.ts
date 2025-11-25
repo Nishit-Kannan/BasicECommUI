@@ -8,6 +8,21 @@ import pythonBookImg from '@/assets/python-book.jpg';
 import runningShoesImg from '@/assets/running-shoes.jpg';
 import casualShoesImg from '@/assets/casual-shoes.jpg';
 
+export interface ProductVariant {
+  id: string;
+  name: string;
+  price: number;
+  inStock: boolean;
+}
+
+export interface ProductSupplier {
+  id: string;
+  name: string;
+  price: number;
+  rating: number;
+  deliveryTime: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -21,6 +36,8 @@ export interface Product {
   sku?: string;
   manufacturer?: string;
   supplier?: string;
+  variants?: ProductVariant[];
+  suppliers?: ProductSupplier[];
 }
 
 export interface User {
@@ -63,6 +80,16 @@ export const mockProducts: Product[] = [
     sku: 'WH-1000XM5',
     manufacturer: 'AudioTech',
     supplier: 'TechSupply Co',
+    variants: [
+      { id: 'v1-black', name: 'Black', price: 299.99, inStock: true },
+      { id: 'v1-silver', name: 'Silver', price: 319.99, inStock: true },
+      { id: 'v1-blue', name: 'Blue', price: 309.99, inStock: false },
+    ],
+    suppliers: [
+      { id: 's1', name: 'TechSupply Co', price: 299.99, rating: 4.8, deliveryTime: '2-3 days' },
+      { id: 's2', name: 'ElectroHub', price: 289.99, rating: 4.6, deliveryTime: '4-5 days' },
+      { id: 's3', name: 'GadgetWorld', price: 310.00, rating: 4.9, deliveryTime: '1-2 days' },
+    ],
   },
   {
     id: '2',
@@ -77,6 +104,14 @@ export const mockProducts: Product[] = [
     sku: 'SW-PRO-2024',
     manufacturer: 'FitTrack',
     supplier: 'TechSupply Co',
+    variants: [
+      { id: 'v2-40mm', name: '40mm', price: 399.99, inStock: true },
+      { id: 'v2-44mm', name: '44mm', price: 449.99, inStock: true },
+    ],
+    suppliers: [
+      { id: 's1', name: 'TechSupply Co', price: 399.99, rating: 4.7, deliveryTime: '2-3 days' },
+      { id: 's4', name: 'WearableTech', price: 389.99, rating: 4.5, deliveryTime: '5-7 days' },
+    ],
   },
   {
     id: '3',

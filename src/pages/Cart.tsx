@@ -54,7 +54,7 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header cartItemCount={cartItems.length} />
+      <Header cartItemCount={cartItems.length} showSearch />
       
       <main className="container py-8">
         <h1 className="mb-8 text-3xl font-bold">Shopping Cart</h1>
