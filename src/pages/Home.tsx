@@ -38,7 +38,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={0} showSearch />
       
       <main className="container py-8">
         {/* Hero Section */}

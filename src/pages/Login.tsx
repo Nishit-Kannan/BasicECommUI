@@ -13,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [customerCreds, setCustomerCreds] = useState({ userId: '', password: '' });
   const [supplierCreds, setSupplierCreds] = useState({ userId: '', password: '' });
+  const [adminCreds, setAdminCreds] = useState({ userId: '', password: '' });
 
   const handleCustomerLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +49,27 @@ const Login = () => {
     }
   };
 
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      // Simple admin check - in production this would be properly secured
+      if (adminCreds.userId === 'admin' && adminCreds.password === 'admin') {
+        localStorage.setItem('authToken', 'admin-token');
+        localStorage.setItem('userType', 'admin');
+        toast.success('Admin login successful!');
+        navigate('/admin/dashboard');
+      } else {
+        throw new Error('Invalid credentials');
+      }
+    } catch (error) {
+      toast.error('Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-hero p-4">
       <Card className="w-full max-w-md shadow-elegant">
@@ -58,9 +80,10 @@ const Login = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="customer" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="customer">Customer</TabsTrigger>
               <TabsTrigger value="supplier">Supplier</TabsTrigger>
+              <TabsTrigger value="admin">Admin</TabsTrigger>
             </TabsList>
             
             <TabsContent value="customer">
@@ -125,6 +148,39 @@ const Login = () => {
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
                   Demo: Use any supplier ID and password
+                </p>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="admin">
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="admin-userId">Admin ID</Label>
+                  <Input
+                    id="admin-userId"
+                    type="text"
+                    placeholder="Enter admin ID"
+                    value={adminCreds.userId}
+                    onChange={(e) => setAdminCreds({ ...adminCreds, userId: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="admin-password">Password</Label>
+                  <Input
+                    id="admin-password"
+                    type="password"
+                    placeholder="Enter password"
+                    value={adminCreds.password}
+                    onChange={(e) => setAdminCreds({ ...adminCreds, password: e.target.value })}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </Button>
+                <p className="text-center text-sm text-muted-foreground">
+                  Demo: admin / admin
                 </p>
               </form>
             </TabsContent>

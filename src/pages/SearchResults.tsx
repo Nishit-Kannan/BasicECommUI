@@ -81,7 +81,7 @@ const SearchResults = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={0} showSearch />
       
       <main className="container py-8">
         <div className="mb-8">
