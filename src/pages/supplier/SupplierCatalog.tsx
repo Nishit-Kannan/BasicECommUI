@@ -9,12 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, ArrowLeft, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
-const CATEGORIES = ['Electronics', 'Books', 'Footwear', 'Accessories', 'Home & Garden'];
+const CATEGORIES = ['Phones', 'Books', 'Footwear'];
 
 const SupplierCatalog = () => {
   const navigate = useNavigate();
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [productImage, setProductImage] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [productImages, setProductImages] = useState<string[]>([]);
+  const [coverImageIndex, setCoverImageIndex] = useState<number>(0);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -23,13 +25,24 @@ const SupplierCatalog = () => {
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProductImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProductImages(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setProductImages(prev => prev.filter((_, i) => i !== index));
+    if (coverImageIndex === index) {
+      setCoverImageIndex(0);
+    } else if (coverImageIndex > index) {
+      setCoverImageIndex(prev => prev - 1);
     }
   };
 
@@ -37,7 +50,9 @@ const SupplierCatalog = () => {
     e.preventDefault();
     toast.success('Product added successfully');
     setShowAddDialog(false);
-    setProductImage("");
+    setSelectedCategory("");
+    setProductImages([]);
+    setCoverImageIndex(0);
   };
 
   return (
@@ -65,64 +80,146 @@ const SupplierCatalog = () => {
                 </DialogHeader>
                 <form onSubmit={handleAddProduct} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="productName">Product Name</Label>
-                    <Input id="productName" required />
+                    <Label htmlFor="category">Category *</Label>
+                    <Select required value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger id="category">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CATEGORIES.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="sku">SKU</Label>
-                    <Input id="sku" placeholder="e.g., WH-1000XM5" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="manufacturer">Manufacturer</Label>
-                    <Input id="manufacturer" placeholder="e.g., AudioTech" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Input id="description" required />
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Price</Label>
-                      <Input id="price" type="number" step="0.01" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="category">Category</Label>
-                      <Select required>
-                        <SelectTrigger id="category">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {CATEGORIES.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                              {cat}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="stock">Initial Stock</Label>
-                    <Input id="stock" type="number" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="image">Product Image</Label>
-                    <div className="flex flex-col gap-2">
-                      <Input 
-                        id="image" 
-                        type="file" 
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="cursor-pointer"
-                      />
-                      {productImage && (
-                        <div className="relative aspect-square w-32 overflow-hidden rounded-md border">
-                          <img src={productImage} alt="Product preview" className="h-full w-full object-cover" />
+
+                  {selectedCategory && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="productName">Product Name</Label>
+                        <Input id="productName" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="sku">SKU</Label>
+                        <Input id="sku" placeholder="e.g., WH-1000XM5" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="manufacturer">Manufacturer</Label>
+                        <Input id="manufacturer" placeholder="e.g., AudioTech" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="description">Description</Label>
+                        <Input id="description" required />
+                      </div>
+
+                      {/* Category-specific fields */}
+                      {selectedCategory === 'Phones' && (
+                        <div className="space-y-4 border rounded-lg p-4 bg-muted/50">
+                          <h3 className="font-medium">Phone Specifications</h3>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="space-y-2">
+                              <Label htmlFor="phoneColor">Color</Label>
+                              <Input id="phoneColor" placeholder="e.g., Midnight Black" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="phoneSize">Size</Label>
+                              <Input id="phoneSize" placeholder="e.g., 6.7 inches" />
+                            </div>
+                          </div>
                         </div>
                       )}
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full">
+
+                      {selectedCategory === 'Books' && (
+                        <div className="space-y-4 border rounded-lg p-4 bg-muted/50">
+                          <h3 className="font-medium">Book Specifications</h3>
+                          <div className="space-y-2">
+                            <Label htmlFor="bookFormat">Format</Label>
+                            <Input id="bookFormat" placeholder="e.g., Hardcover, Paperback, E-book" />
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedCategory === 'Footwear' && (
+                        <div className="space-y-4 border rounded-lg p-4 bg-muted/50">
+                          <h3 className="font-medium">Footwear Specifications</h3>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="space-y-2">
+                              <Label htmlFor="footwearColor">Color</Label>
+                              <Input id="footwearColor" placeholder="e.g., Navy Blue" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="footwearSize">Size</Label>
+                              <Input id="footwearSize" placeholder="e.g., US 9, EU 42" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="price">Price</Label>
+                          <Input id="price" type="number" step="0.01" required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="stock">Initial Stock</Label>
+                          <Input id="stock" type="number" required />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="images">Product Images *</Label>
+                        <div className="flex flex-col gap-2">
+                          <Input 
+                            id="images" 
+                            type="file" 
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageUpload}
+                            className="cursor-pointer"
+                          />
+                          {productImages.length > 0 && (
+                            <div className="grid grid-cols-3 gap-2">
+                              {productImages.map((img, index) => (
+                                <div key={index} className="relative aspect-square overflow-hidden rounded-md border">
+                                  <img src={img} alt={`Product ${index + 1}`} className="h-full w-full object-cover" />
+                                  <div className="absolute top-1 right-1 flex gap-1">
+                                    <Button
+                                      type="button"
+                                      size="icon"
+                                      variant={coverImageIndex === index ? "default" : "secondary"}
+                                      className="h-6 w-6"
+                                      onClick={() => setCoverImageIndex(index)}
+                                    >
+                                      {coverImageIndex === index ? "★" : "☆"}
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      size="icon"
+                                      variant="destructive"
+                                      className="h-6 w-6"
+                                      onClick={() => handleRemoveImage(index)}
+                                    >
+                                      ×
+                                    </Button>
+                                  </div>
+                                  {coverImageIndex === index && (
+                                    <div className="absolute bottom-0 left-0 right-0 bg-primary/90 text-primary-foreground text-xs text-center py-1">
+                                      Cover
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <p className="text-xs text-muted-foreground">Upload multiple images. Click the star to set cover image.</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <Button type="submit" className="w-full" disabled={!selectedCategory}>
                     Add Product
                   </Button>
                 </form>
