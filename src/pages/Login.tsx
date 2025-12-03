@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { mockApi } from "@/lib/mockData";
 import { toast } from "sonner";
+import { API_ENDPOINTS } from "@/config/api";
+import { storeTokens } from "@/lib/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,8 +21,21 @@ const Login = () => {
     setLoading(true);
     
     try {
-      const result = await mockApi.login(customerCreds.userId, customerCreds.password);
-      localStorage.setItem('authToken', result.token);
+      const response = await fetch(API_ENDPOINTS.auth.login, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: customerCreds.userId, 
+          password: customerCreds.password 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      storeTokens(data);
       localStorage.setItem('userType', 'customer');
       toast.success('Login successful!');
       navigate('/home');
@@ -37,8 +51,21 @@ const Login = () => {
     setLoading(true);
     
     try {
-      const result = await mockApi.supplierLogin(supplierCreds.userId, supplierCreds.password);
-      localStorage.setItem('authToken', result.token);
+      const response = await fetch(API_ENDPOINTS.supplier.login, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: supplierCreds.userId, 
+          password: supplierCreds.password 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      storeTokens(data);
       localStorage.setItem('userType', 'supplier');
       toast.success('Login successful!');
       navigate('/supplier/dashboard');
@@ -54,15 +81,24 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // Simple admin check - in production this would be properly secured
-      if (adminCreds.userId === 'admin' && adminCreds.password === 'admin') {
-        localStorage.setItem('authToken', 'admin-token');
-        localStorage.setItem('userType', 'admin');
-        toast.success('Admin login successful!');
-        navigate('/admin/dashboard');
-      } else {
-        throw new Error('Invalid credentials');
+      const response = await fetch(API_ENDPOINTS.auth.login, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: adminCreds.userId, 
+          password: adminCreds.password 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
       }
+
+      const data = await response.json();
+      storeTokens(data);
+      localStorage.setItem('userType', 'admin');
+      toast.success('Admin login successful!');
+      navigate('/admin/dashboard');
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
