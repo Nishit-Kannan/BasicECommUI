@@ -2,14 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Package, LogOut } from "lucide-react";
+import { logout } from "@/lib/auth";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userType');
-    navigate('/login');
+    logout();
   };
 
   return (

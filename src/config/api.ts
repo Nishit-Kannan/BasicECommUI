@@ -49,7 +49,6 @@ export const API_ENDPOINTS = {
   
   // Supplier
   supplier: {
-    login: `${API_BASE_URL}/supplier/auth/login`,
     catalog: `${API_BASE_URL}/supplier/catalog`,
     addProduct: `${API_BASE_URL}/supplier/catalog/add`,
     updateProduct: (id: string) => `${API_BASE_URL}/supplier/catalog/${id}`,

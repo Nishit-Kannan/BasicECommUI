@@ -74,7 +74,26 @@ export const refreshAccessToken = async (): Promise<string | null> => {
 };
 
 // Logout and redirect
-export const logout = () => {
+export const logout = async () => {
+  const token = getAccessToken();
+  
+  // Call logout API endpoint if token exists
+  if (token) {
+    try {
+      await fetch(`${API_BASE_URL}/auth/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      // Even if API call fails, continue with local logout
+      console.error('Logout API call failed:', error);
+    }
+  }
+  
+  // Clear tokens and redirect
   clearTokens();
   window.location.href = '/login';
 };

@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logout } from "@/lib/auth";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -21,9 +22,7 @@ export const Header = ({ cartItemCount = 0, showSearch = false }: HeaderProps) =
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userType');
-    navigate('/login');
+    logout();
   };
 
   const handleSearch = (e: React.FormEvent) => {

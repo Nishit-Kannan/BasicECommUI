@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +7,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { API_ENDPOINTS } from "@/config/api";
-import { storeTokens } from "@/lib/auth";
+import { storeTokens, isAuthenticated } from "@/lib/auth";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const userType = localStorage.getItem('userType');
+      if (userType === 'supplier') {
+        navigate('/supplier/dashboard', { replace: true });
+      } else if (userType === 'admin') {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/home', { replace: true });
+      }
+    }
+  }, [navigate]);
   const [loading, setLoading] = useState(false);
   const [customerCreds, setCustomerCreds] = useState({ email: '', password: '' });
   const [supplierCreds, setSupplierCreds] = useState({ email: '', password: '' });
@@ -36,9 +50,19 @@ const Login = () => {
 
       const data = await response.json();
       storeTokens(data);
-      localStorage.setItem('userType', 'customer');
+      // Use role from response if available, otherwise default to customer
+      const userType = data.role || data.userType || 'customer';
+      localStorage.setItem('userType', userType);
       toast.success('Login successful!');
-      navigate('/home');
+      
+      // Redirect based on role
+      if (userType === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (userType === 'supplier') {
+        navigate('/supplier/dashboard');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
@@ -51,7 +75,7 @@ const Login = () => {
     setLoading(true);
     
     try {
-      const response = await fetch(API_ENDPOINTS.supplier.login, {
+      const response = await fetch(API_ENDPOINTS.auth.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -66,9 +90,19 @@ const Login = () => {
 
       const data = await response.json();
       storeTokens(data);
-      localStorage.setItem('userType', 'supplier');
+      // Use role from response if available, otherwise default to supplier
+      const userType = data.role || data.userType || 'supplier';
+      localStorage.setItem('userType', userType);
       toast.success('Login successful!');
-      navigate('/supplier/dashboard');
+      
+      // Redirect based on role
+      if (userType === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (userType === 'supplier') {
+        navigate('/supplier/dashboard');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
@@ -96,9 +130,19 @@ const Login = () => {
 
       const data = await response.json();
       storeTokens(data);
-      localStorage.setItem('userType', 'admin');
-      toast.success('Admin login successful!');
-      navigate('/admin/dashboard');
+      // Use role from response if available, otherwise default to admin
+      const userType = data.role || data.userType || 'admin';
+      localStorage.setItem('userType', userType);
+      toast.success('Login successful!');
+      
+      // Redirect based on role
+      if (userType === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (userType === 'supplier') {
+        navigate('/supplier/dashboard');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
