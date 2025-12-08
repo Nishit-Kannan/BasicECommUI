@@ -3,12 +3,13 @@
 
 import { getAccessToken, refreshAccessToken, logout } from '@/lib/auth';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+// export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+export const API_BASE_URL = 'http://localhost';
 
 export const API_ENDPOINTS = {
   // Authentication
   auth: {
-    login: `${API_BASE_URL}/auth/login`,
+    login: `${API_BASE_URL}/auth/api/auth/login`,
     logout: `${API_BASE_URL}/auth/logout`,
     register: `${API_BASE_URL}/auth/register`,
     refresh: `${API_BASE_URL}/auth/refresh`,

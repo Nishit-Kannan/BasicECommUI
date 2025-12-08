@@ -12,9 +12,9 @@ import { storeTokens } from "@/lib/auth";
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [customerCreds, setCustomerCreds] = useState({ userId: '', password: '' });
-  const [supplierCreds, setSupplierCreds] = useState({ userId: '', password: '' });
-  const [adminCreds, setAdminCreds] = useState({ userId: '', password: '' });
+  const [customerCreds, setCustomerCreds] = useState({ email: '', password: '' });
+  const [supplierCreds, setSupplierCreds] = useState({ email: '', password: '' });
+  const [adminCreds, setAdminCreds] = useState({ email: '', password: '' });
 
   const handleCustomerLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const Login = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          userId: customerCreds.userId, 
+          email: customerCreds.email, 
           password: customerCreds.password 
         }),
       });
@@ -55,7 +55,7 @@ const Login = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          userId: supplierCreds.userId, 
+          email: supplierCreds.email, 
           password: supplierCreds.password 
         }),
       });
@@ -85,7 +85,7 @@ const Login = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          userId: adminCreds.userId, 
+          email: adminCreds.email, 
           password: adminCreds.password 
         }),
       });
@@ -125,13 +125,13 @@ const Login = () => {
             <TabsContent value="customer">
               <form onSubmit={handleCustomerLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="customer-userId">User ID</Label>
+                  <Label htmlFor="customer-email">Email</Label>
                   <Input
-                    id="customer-userId"
-                    type="text"
-                    placeholder="Enter your user ID"
-                    value={customerCreds.userId}
-                    onChange={(e) => setCustomerCreds({ ...customerCreds, userId: e.target.value })}
+                    id="customer-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={customerCreds.email}
+                    onChange={(e) => setCustomerCreds({ ...customerCreds, email: e.target.value })}
                     required
                   />
                 </div>
@@ -150,7 +150,7 @@ const Login = () => {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
-                  Demo: Use any user ID and password
+                  Demo: Use any email and password
                 </p>
               </form>
             </TabsContent>
@@ -158,13 +158,13 @@ const Login = () => {
             <TabsContent value="supplier">
               <form onSubmit={handleSupplierLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="supplier-userId">Supplier ID</Label>
+                  <Label htmlFor="supplier-email">Email</Label>
                   <Input
-                    id="supplier-userId"
-                    type="text"
-                    placeholder="Enter your supplier ID"
-                    value={supplierCreds.userId}
-                    onChange={(e) => setSupplierCreds({ ...supplierCreds, userId: e.target.value })}
+                    id="supplier-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={supplierCreds.email}
+                    onChange={(e) => setSupplierCreds({ ...supplierCreds, email: e.target.value })}
                     required
                   />
                 </div>
@@ -183,7 +183,7 @@ const Login = () => {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
-                  Demo: Use any supplier ID and password
+                  Demo: supplier@example.com / supplier123
                 </p>
               </form>
             </TabsContent>
@@ -191,13 +191,13 @@ const Login = () => {
             <TabsContent value="admin">
               <form onSubmit={handleAdminLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="admin-userId">Admin ID</Label>
+                  <Label htmlFor="admin-email">Email</Label>
                   <Input
-                    id="admin-userId"
-                    type="text"
-                    placeholder="Enter admin ID"
-                    value={adminCreds.userId}
-                    onChange={(e) => setAdminCreds({ ...adminCreds, userId: e.target.value })}
+                    id="admin-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={adminCreds.email}
+                    onChange={(e) => setAdminCreds({ ...adminCreds, email: e.target.value })}
                     required
                   />
                 </div>
@@ -216,7 +216,7 @@ const Login = () => {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
-                  Demo: admin / admin
+                  Demo: Use any email and password
                 </p>
               </form>
             </TabsContent>
